@@ -1,4 +1,4 @@
-//#!groovy
+//#!/usr/bin/env groovy
 
 /*
 class ECRImage implements Serializable {
@@ -39,3 +39,5 @@ class ECRImage implements Serializable {
 def testMe(String string) {
     echo "TEST: ${string}"
 }
+
+return this

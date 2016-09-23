@@ -1,4 +1,4 @@
-#!groovy
+#!/usr/bin/env groovy
 
 node('dev_linux_awscli_docker') {
     try {
