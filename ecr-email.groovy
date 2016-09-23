@@ -2,6 +2,8 @@
 
 node('dev_linux_awscli_docker') {
     try {
+        sh 'sudo yum -y install git'
+
         checkout scm
 
         def ecrImage = load("ecr-image.groovy")
