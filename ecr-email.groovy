@@ -1,4 +1,4 @@
-#!/usr/bin/env groovy
+#!groovy
 
 def BUILD_IMAGE = "312226949769.dkr.ecr.us-east-1.amazonaws.com/centos7.x86_64:latest"
 
@@ -14,11 +14,6 @@ node('dev_linux_awscli_docker') {
         }
 
         /*
-        def image = new ECRImage("312226949769.dkr.ecr.us-east-1.amazonaws.com/centos7.x86_64:latest")
-        def out_dir = image.inside(this) { out_dir ->
-            sh "date > ${out_dir}/test"
-        }
-
         sh "cat ${out_dir}/test"
         sh "aws s3 cp ${out_dir}/test s3://idtq-deployment-jenkins-hermes/"
         */

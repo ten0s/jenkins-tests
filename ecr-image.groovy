@@ -1,4 +1,4 @@
-#!/usr/bin/env groovy
+#!groovy
 
 class ECRImage implements Serializable {
     def image = null
