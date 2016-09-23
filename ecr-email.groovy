@@ -13,10 +13,10 @@ node('dev_linux_awscli_docker') {
         def image = load "ecr-image.groovy"
         def out_dir = image.runInside(BUILD_IMAGE) { _out_dir ->
             sh "date > test"
-            stash name: result includes: test
+            stash name: 'result', includes: 'test'
         }
 
-        unstash name: result
+        unstash name: 'result'
         sh "cat test"
 
         /*
