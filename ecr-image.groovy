@@ -1,4 +1,4 @@
-#!groovy
+//#!groovy
 
 /*
 class ECRImage implements Serializable {
