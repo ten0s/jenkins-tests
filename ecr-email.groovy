@@ -4,33 +4,29 @@ def BUILD_IMAGE = "312226949769.dkr.ecr.us-east-1.amazonaws.com/centos7.x86_64:l
 
 node('dev_linux_awscli_docker') {
     try {
+        sh 'ls -l'
+
         sh 'sudo yum -y install git'
 
         checkout scm
 
         def image = load "ecr-image.groovy"
-        def out_dir = image.runInside(BUILD_IMAGE) { out_dir ->
-            sh "date > ${out_dir}/test"
+        def out_dir = image.runInside(BUILD_IMAGE) { _out_dir ->
+            sh "date > test"
+            stash name: result includes: test
         }
 
+        unstash name: result
+        sh "cat test"
+
         /*
-        sh "cat ${out_dir}/test"
         sh "aws s3 cp ${out_dir}/test s3://idtq-deployment-jenkins-hermes/"
         */
+
+        deleteDir()
     }
     catch (err) {
         currentBuild.result = 'FAILURE'
         throw err
     }
-/*
-    finally {
-        to = env.CHANGE_AUTHOR_EMAIL ?: 'd.klionsky@belitsoft.com'
-        status = currentBuild.result ?: 'SUCCESS'
-        subject = "${status}: Job ${env.JOB_NAME} #${env.BUILD_NUMBER}"
-        body = """
-        <p>See Job ${env.JOB_NAME} #${env.BUILD_NUMBER} <a href='${env.BUILD_URL}console'>console output</a></p>
-        """
-        emailext to: "${to}", subject: "${subject}", body: "${body}"
-    }
-*/
 }
