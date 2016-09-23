@@ -2,6 +2,8 @@
 
 node('dev_linux_awscli_docker') {
     try {
+        checkout scm
+
         def ecrImage = load("ecr-image.groovy")
         ecrImage.test("print me")
 
