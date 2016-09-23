@@ -18,9 +18,9 @@ node('dev_linux_awscli_docker') {
         sh "aws s3 cp ${out_dir}/test s3://idtq-deployment-jenkins-hermes/"
         */
     }
-    catch (e) {
+    catch (err) {
         currentBuild.result = 'FAILURE'
-        throw e
+        throw err
     }
 /*
     finally {
