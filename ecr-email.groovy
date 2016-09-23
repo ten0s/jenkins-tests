@@ -8,7 +8,7 @@ node('dev_linux_awscli_docker') {
         sh 'pwd'
         sh 'ls -l'
 
-        def ecrImage = load "ecr-image.groovy"
+        def ecrImage = load "/home/ec2-user/workspace/pipeline/ecr-image.groovy"
         ecrImage.test("print me")
 
         /*
