@@ -11,6 +11,27 @@ def registryId = null
 @Field
 def region = null
 
+def runInside(image, closure) {
+    this.image = image
+
+    def parsed = image.tokenize('.')
+    this.registryId = parsed[0]
+    this.region = parsed[3]
+
+    sh "aws ecr get-login --region ${region} --registry-ids ${registryId} | sh"
+    sh "docker pull ${image}"
+
+    // create tmp dir and return its name
+    def out_dir = script.sh(returnStdout: true, script: 'mktemp -d -p $(pwd)').trim()
+
+    def container = script.docker.image(image)
+    container.inside("-u root -v ${out_dir}:/out/") {
+        closure('/out/')
+    }
+
+    return out_dir
+}
+
 /*
 class ECRImage implements Serializable {
     def image = null

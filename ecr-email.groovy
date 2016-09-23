@@ -4,12 +4,14 @@ node('dev_linux_awscli_docker') {
     try {
         sh 'sudo yum -y install git'
 
-        checkout scm
-        sh 'pwd'
-        sh 'ls -l'
+        //checkout scm
 
-        def ecrImage = load "ecr-image.groovy"
-        ecrImage.testMe("print me")
+        def image = load "ecr-image.groovy"
+        def out_dir = image.runInside(
+            "312226949769.dkr.ecr.us-east-1.amazonaws.com/centos7.x86_64:latest"
+        ) { out_dir ->
+            sh "date > ${out_dir}/test"
+        }
 
         /*
         def image = new ECRImage("312226949769.dkr.ecr.us-east-1.amazonaws.com/centos7.x86_64:latest")
