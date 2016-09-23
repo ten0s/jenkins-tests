@@ -20,7 +20,7 @@ def inside(image, closure) {
     sh "aws ecr get-login --region ${img.region} --registry-ids ${img.registryId} | sh"
     sh "docker pull ${img.image}"
 
-    def out_dir = script.sh(returnStdout: true, script: 'mktemp -d -p $(pwd)').trim()
+    def out_dir = sh(returnStdout: true, script: 'mktemp -d -p $(pwd)').trim()
 
     def container = docker.image(img.image)
     container.inside("-u root -v ${out_dir}:/out/") {
