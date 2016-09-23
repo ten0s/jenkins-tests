@@ -36,6 +36,6 @@ class ECRImage implements Serializable {
 }
 */
 
-def test(string) {
+def test(String string) {
     echo "TEST: ${string}"
 }
