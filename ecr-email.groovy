@@ -4,7 +4,7 @@ node('dev_linux_awscli_docker') {
     try {
         sh 'sudo yum -y install git'
 
-        //checkout scm
+        checkout scm
 
         def image = load "ecr-image.groovy"
         def out_dir = image.runInside(
