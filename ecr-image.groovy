@@ -1,38 +1,5 @@
 #!/usr/bin/env groovy
 
-import groovy.transform.Field
-
-@Field
-def image = null
-
-@Field
-def registryId = null
-
-@Field
-def region = null
-
-def runInside(image, closure) {
-    this.image = image
-
-    def parsed = image.tokenize('.')
-    this.registryId = parsed[0]
-    this.region = parsed[3]
-
-    sh "aws ecr get-login --region ${region} --registry-ids ${registryId} | sh"
-    sh "docker pull ${image}"
-
-    // create tmp dir and return its name
-    def out_dir = script.sh(returnStdout: true, script: 'mktemp -d -p $(pwd)').trim()
-
-    def container = script.docker.image(image)
-    container.inside("-u root -v ${out_dir}:/out/") {
-        closure('/out/')
-    }
-
-    return out_dir
-}
-
-/*
 class ECRImage implements Serializable {
     def image = null
     def registryId = null
@@ -45,31 +12,22 @@ class ECRImage implements Serializable {
         this.registryId = parsed[0]
         this.region = parsed[3]
     }
-
-    // https://support.cloudbees.com/hc/en-us/articles/217736618-How-do-I-access-Pipeline-DSLs-from-inside-a-Groovy-class
-    def pull(script) {
-      script.sh "aws ecr get-login --region ${region} --registry-ids ${registryId} | sh"
-      script.sh "docker pull ${image}"
-    }
-
-    def inside(script, closure) {
-        pull(script)
-
-        // create tmp dir and return its name
-        def out_dir = script.sh(returnStdout: true, script: 'mktemp -d -p $(pwd)').trim()
-
-        def container = script.docker.image(image)
-        container.inside("-u root -v ${out_dir}:/out/") {
-            closure('/out/')
-        }
-
-        return out_dir
-    }
 }
-*/
 
-def testMe(String string) {
-    echo "TEST: ${string}"
+def inside(image, closure) {
+    def img = new ECRImage(image)
+
+    sh "aws ecr get-login --region ${img.region} --registry-ids ${img.registryId} | sh"
+    sh "docker pull ${img.image}"
+
+    def out_dir = script.sh(returnStdout: true, script: 'mktemp -d -p $(pwd)').trim()
+
+    def container = docker.image(img.image)
+    container.inside("-u root -v ${out_dir}:/out/") {
+        closure('/out/')
+    }
+
+    return out_dir
 }
 
 return this

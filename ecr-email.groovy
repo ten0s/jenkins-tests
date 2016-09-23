@@ -1,5 +1,7 @@
 #!/usr/bin/env groovy
 
+def BUILD_IMAGE = "312226949769.dkr.ecr.us-east-1.amazonaws.com/centos7.x86_64:latest"
+
 node('dev_linux_awscli_docker') {
     try {
         sh 'sudo yum -y install git'
@@ -7,9 +9,7 @@ node('dev_linux_awscli_docker') {
         checkout scm
 
         def image = load "ecr-image.groovy"
-        def out_dir = image.runInside(
-            "312226949769.dkr.ecr.us-east-1.amazonaws.com/centos7.x86_64:latest"
-        ) { out_dir ->
+        def out_dir = image.inside(BUILD_IMAGE) { out_dir ->
             sh "date > ${out_dir}/test"
         }
 
