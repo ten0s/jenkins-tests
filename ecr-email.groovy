@@ -9,7 +9,7 @@ node('dev_linux_awscli_docker') {
         checkout scm
 
         def image = load "ecr-image.groovy"
-        def out_dir = image.inside(BUILD_IMAGE) { out_dir ->
+        def out_dir = image.runInside(BUILD_IMAGE) { out_dir ->
             sh "date > ${out_dir}/test"
         }
 

@@ -14,7 +14,7 @@ class ECRImage implements Serializable {
     }
 }
 
-def inside(image, closure) {
+def runInside(image, closure) {
     def img = new ECRImage(image)
 
     sh "aws ecr get-login --region ${img.region} --registry-ids ${img.registryId} | sh"
