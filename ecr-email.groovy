@@ -1,7 +1,7 @@
 #!groovy
 
 node('dev_linux_awscli_docker') {
-//    try {
+    try {
         sh 'sudo yum -y install git'
 
         checkout scm
@@ -19,12 +19,12 @@ node('dev_linux_awscli_docker') {
         sh "cat ${out_dir}/test"
         sh "aws s3 cp ${out_dir}/test s3://idtq-deployment-jenkins-hermes/"
         */
-//    }
-//    catch (e) {
-//        currentBuild.result = 'FAILURE'
-//        error "${e}"
-/*
     }
+    catch (e) {
+        currentBuild.result = 'FAILURE'
+        throw e
+    }
+/*
     finally {
         to = env.CHANGE_AUTHOR_EMAIL ?: 'd.klionsky@belitsoft.com'
         status = currentBuild.result ?: 'SUCCESS'
