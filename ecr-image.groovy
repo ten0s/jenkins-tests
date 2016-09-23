@@ -1,10 +1,19 @@
 #!/usr/bin/env groovy
 
+@Field
+def image = null
+
+@Field
+def registryId = null
+
+@Field
+def region = null
+
 /*
 class ECRImage implements Serializable {
-    def image
-    def registryId
-    def region
+    def image = null
+    def registryId = null
+    def region = null
 
     ECRImage(image) {
         this.image = image
