@@ -9,19 +9,19 @@ node('dev_linux_awscli_docker') {
         checkout scm
 
         def image = load "ecr-image.groovy"
-        def out_dir = image.insideWith(BUILD_IMAGE) { out_dir ->
-            sh "date > ${out_dir}/test"
+        def outDir = image.insideWith(BUILD_IMAGE) { outDir ->
+            sh "date > ${outDir}/test"
         }
 
         sh 'ls -la'
 
-        sh "cat ${out_dir}/test"
+        sh "cat ${outDir}/test"
 
         /*
-        sh "aws s3 cp ${out_dir}/test s3://idtq-deployment-jenkins-hermes/"
+        sh "aws s3 cp ${outDir}/test s3://idtq-deployment-jenkins-hermes/"
         */
 
-        dir(out_dir) {
+        dir(outDir) {
           deleteDir()
         }
     }
