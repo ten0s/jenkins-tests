@@ -1,13 +1,13 @@
 #!groovy
 
 node('dev_linux_awscli_docker') {
-    try {
+//    try {
         sh 'sudo yum -y install git'
 
         checkout scm
         sh 'ls -l'
 
-        def ecrImage = load("ecr-image.groovy")
+        def ecrImage = load "ecr-image.groovy"
         ecrImage.test("print me")
 
         /*
@@ -19,10 +19,11 @@ node('dev_linux_awscli_docker') {
         sh "cat ${out_dir}/test"
         sh "aws s3 cp ${out_dir}/test s3://idtq-deployment-jenkins-hermes/"
         */
-    }
-    catch (e) {
-        currentBuild.result = 'FAILURE'
-        error "${e}"
+//    }
+//    catch (e) {
+//        currentBuild.result = 'FAILURE'
+//        error "${e}"
+/*
     }
     finally {
         to = env.CHANGE_AUTHOR_EMAIL ?: 'd.klionsky@belitsoft.com'
@@ -34,3 +35,4 @@ node('dev_linux_awscli_docker') {
         emailext to: "${to}", subject: "${subject}", body: "${body}"
     }
 }
+*/
