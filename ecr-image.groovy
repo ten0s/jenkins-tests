@@ -1,5 +1,6 @@
 #!groovy
 
+/*
 class ECRImage implements Serializable {
     def image
     def registryId
@@ -33,6 +34,7 @@ class ECRImage implements Serializable {
         return out_dir
     }
 }
+*/
 
 def test(string) {
     echo "TEST: ${string}"
