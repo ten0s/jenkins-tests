@@ -14,16 +14,36 @@ class ECRImage implements Serializable {
     }
 }
 
-def runInside(image, closure) {
+def insideWith(image, closure) {
     def img = new ECRImage(image)
 
     sh "aws ecr get-login --region ${img.region} --registry-ids ${img.registryId} | sh"
     sh "docker pull ${img.image}"
 
+    def out_dir = sh(returnStdout: true, script: 'mktemp -d -p $(pwd)').trim()
+
     def container = docker.image(img.image)
-    container.inside("-u root") {
-        closure()
+    container.inside("-u root -v ${out_dir}:/out/") {
+        closure('/out/')
     }
+
+    return out_dir
+}
+
+def runWith(image, closure) {
+    def img = new ECRImage(image)
+
+    sh "aws ecr get-login --region ${img.region} --registry-ids ${img.registryId} | sh"
+    sh "docker pull ${img.image}"
+
+    def out_dir = sh(returnStdout: true, script: 'mktemp -d -p $(pwd)').trim()
+
+    def container = docker.image(img.image)
+    container.withRun("-u root -v ${out_dir}:/out/") {
+        closure('/out/')
+    }
+
+    return out_dir
 }
 
 return this

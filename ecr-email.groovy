@@ -9,19 +9,21 @@ node('dev_linux_awscli_docker') {
         checkout scm
 
         def image = load "ecr-image.groovy"
-        image.runInside(BUILD_IMAGE) {
-            sh "date > test"
-            stash name: 'result', includes: 'test'
+        def out_dir = image.insideWith(BUILD_IMAGE) { out_dir ->
+            sh "date > ${out_dir}/test"
         }
 
         sh 'ls -la'
 
-        unstash name: 'result'
-        sh "cat test"
+        sh "cat ${out_dir}/test"
 
         /*
         sh "aws s3 cp ${out_dir}/test s3://idtq-deployment-jenkins-hermes/"
         */
+
+        dir(out_dir) {
+          deleteDir()
+        }
     }
     catch (err) {
         currentBuild.result = 'FAILURE'
